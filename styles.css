@@ -10,6 +10,45 @@ h1 {
     font-size: 18px;
 }
 
+.popup {
+    background: rgba(0,0,0,0.6);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.popup-content{
+    height: 250px;
+    width: 500px;
+    background: #4838da;
+    padding: 20px;
+    border-radius: 5px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+}
+
+.errores {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    color: red;
+}
+
+.close{ 
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    border-radius: 12px;
+}
+
 .alumnos {
     padding-top: 64px;
     display: flex;

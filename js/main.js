@@ -18,49 +18,82 @@
         button.className = "botonAgregar";
         button.innerText = "AGREGAR ALUMNO";
 
-        button.addEventListener("click", agregarAlumno);
+        button.addEventListener("click", renderizarFormInscripcion);
+        button.addEventListener("click", function() {
+            document.querySelector(".popup").style.display = "flex";
+        })
 
         contenedorAgregar.append(button);
     }
 
-    function agregarAlumno(){
+    function renderizarFormInscripcion(){
 
-        let alumno = new Alumno()
-    
-        do {
-              alumno.nombre = prompt("Ingrese el nombre: ")
-            if (alumno.nombre.trim() === "" ) {
-                alert("Ingrese un nombre valido!")
-            }
-        } while (alumno.nombre.trim() === "");
-    
-        do {
-            alumno.apellido = prompt("Ingrese el apellido: ")
-           if (alumno.apellido.trim() === "" ) {
-               alert("Ingrese un apellido valido!")
-           }
-       } while (alumno.apellido.trim() === "")
+        contenedorForm.innerHTML = `<button id="closer" class="close">X</button> <div id="error" class="errores"></div>`;
 
-        do {
-            alumno.edad = parseInt(prompt("Ingrese la edad"))
-           if ( alumno.edad < 13) {
-            alert("No admitimos alumnos de esas edad. Lo lamentamos ")
-           }
-       } while ( alumno.edad < 13 )
+        const inputNombre = document.createElement("input");
+        inputNombre.placeholder = "Nombre";
+        const inputApellido = document.createElement("input");
+        inputApellido.placeholder = "Apellido";
+        const inputEdad = document.createElement("input");
+        inputEdad.placeholder = "Edad";
+        const inputCinturon = document.createElement("input");
+        inputCinturon.placeholder = "Color de cinturon";
+
+        const button = document.createElement("button");
+        const buttonClose = document.getElementById("closer");
+
+        button.innerText = "Confirmar";
+
+        button.addEventListener("click", function (){
+            agregarAlumno(inputNombre.value, inputApellido.value, inputEdad.value, inputCinturon.value)
+        } );
+
+        buttonClose.addEventListener("click", function() {
+            document.querySelector(".popup").style.display = "none";
+        })
+        contenedorForm.append(inputNombre, inputApellido, inputEdad, inputCinturon, button);
+
+
+        
+
+    }
+
+    function agregarAlumno(nombre, apellido, edad, cinturon){
+
+        let alumno = new Alumno(nombre, apellido, edad, cinturon);
+        let messages = [];
+
+        console.log(alumno)
+
+        if (alumno.nombre.trim() === "") {
+            messages.push("Ingrese un nombre valido!")
+        }
+        
+        if (alumno.apellido.trim() === "") {
+            messages.push("Ingrese un apellido valido!")
+        }
+
+        if (alumno.edad < 13) {
+            messages.push("No admitimos alumnos de esas edad. Lo lamentamos.")
+        }
 
        let cinturon_min = ""
+       cinturon_min = (alumno.cinturon).toLowerCase();
 
-       do {
-
-        alumno.cinturon = prompt("Ingrese el color del cinturon: ")
-        cinturon_min = (alumno.cinturon).toLowerCase()
-
-        if ((cinturon_min.trim() === "") || ( !["blanco", "azul", "violeta", "marron", "negro"].includes(cinturon_min)) ) {
-            alert("Ingrese un color valido!")
+        if ( (cinturon_min.trim() === "") || ( !["blanco", "azul", "violeta", "marron", "negro"].includes(cinturon_min)) ) {
+            messages.push("Ingrese un color valido");
         }
-        } while ( (cinturon_min.trim() === "") || ( !["blanco", "azul", "violeta", "marron", "negro"].includes(cinturon_min) ) ) ;
 
-        alumnos.push(alumno)
+        if ( messages.length > 0 ) {
+            const divError = document.getElementById("error");
+            console.log(divError)
+            divError.innerText = messages.join(` 
+            `)
+        }
+
+        if ( messages.length == 0 ) {
+            alumnos.push(alumno)
+        }
 
         guardarAlumnosLS();
         renderizarAlumnos(alumnos)
@@ -75,7 +108,6 @@
             alumnos = alumnosLS;
         }
 
-        console.log(alumnos)
     
         renderizarAlumnos(alumnos);
     }
@@ -138,6 +170,7 @@
 
 let alumnos = []
 const contenedor = document.getElementById("contenedor");
+const contenedorForm = document.getElementById("form-elements")
 const inputNombreAlumno = document.getElementById("nombreAlumno");
 inputNombreAlumno.addEventListener("input", filtrarAlumnos);
 renderizarBotonPrincipal();
