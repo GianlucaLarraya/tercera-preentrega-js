@@ -93,6 +93,21 @@
 
         if ( messages.length == 0 ) {
             alumnos.push(alumno)
+
+            Toastify({
+                text: `${alumno.nombre} fue añadido/a correctamente!`,
+                duration: 6000,
+                destination: "https://github.com/apvarun/toastify-js",
+                newWindow: true,
+                close: true,
+                gravity: "top", 
+                position: "right", 
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                  background: "linear-gradient(to right, #00b09b, #96c93d)",
+                },
+                onClick: function(){} // Callback after click
+              }).showToast();
         }
 
         guardarAlumnosLS();
@@ -146,6 +161,21 @@
         const indiceAlumno = alumnos.findIndex( (a) => {
             return a.nombre === alumno.nombre;
         });
+
+        Toastify({
+            text: `${alumno.nombre} fue borrado/a correctamente!`,
+            duration: 6000,
+            destination: "https://github.com/apvarun/toastify-js",
+            newWindow: true,
+            close: true,
+            gravity: "top", 
+            position: "right", 
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "red",
+            },
+            onClick: function(){} // Callback after click
+          }).showToast();
     
         alumnos.splice(indiceAlumno, 1);
     
@@ -166,15 +196,50 @@
     
     } 
 
+    function obtenerProfesores() {
+        
+        fetch("../profesores.json")
+        .then( (response) => {
+            return response.json();
+         })
+
+        .then( (responseJSON) => {
+
+            profesores = responseJSON;
+
+            renderizarProfesores(profesores);
+        });
+ }
+
+    function renderizarProfesores(profesores){
+
+        contenedorProfesores.innerHTML = " ";
+
+        for(const profesor of profesores) {
+            const div = document.createElement("div");
+            div.className = "profesor";
+            div.innerHTML = `
+            <img src="usuario_anon.jpeg" class="foto_usuario" />
+            <h3>${profesor.nombre}</h3>
+            <h5>Edad: ${profesor.edad}</h5>
+            <h5>Cinturon: ${profesor.cinturon}</h5>`;
+            contenedorProfesores.append(div);
+        }
+
+    }
+
 /* Inicio del programa */
 
 let alumnos = []
+let profesores = []
 const contenedor = document.getElementById("contenedor");
+const contenedorProfesores = document.getElementById("contenedor-profes")
 const contenedorForm = document.getElementById("form-elements")
 const inputNombreAlumno = document.getElementById("nombreAlumno");
 inputNombreAlumno.addEventListener("input", filtrarAlumnos);
 renderizarBotonPrincipal();
 obtenerAlumnosLS();
+obtenerProfesores();
 
 
 

@@ -1,0 +1,18 @@
+[
+    {
+      "nombre": "Samuray",
+      "apellido": "Ledesma",
+      "edad": 50,
+      "cinturon": "negro"
+    },
+    {
+        "nombre": "Jhonny",
+        "edad": 35,
+        "cinturon": "negro"
+    },
+    {
+        "nombre": "Pablo",
+        "edad": 32,
+        "cinturon": "negro"
+    }
+  ]
